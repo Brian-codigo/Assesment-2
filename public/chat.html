@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Home page</title>
+      <link rel="icon" type="image/x-icon" href="Images/home.png">
+      <meta name="description" content="">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="css/demo.css">
+  </head>
+  <body>
+
+    <header>
+      <h1>Brian's<br>Website</h1>
+    </header>
+
+    <nav class="sidenav">
+      <a href="index.html"><img src="Images/home.png" alt="home" height="100%" width="100%"></a>
+      <a href="details.html"><img src="Images/profile.png" alt="profile" height="100%" width="100%"></a>
+      <a href="chat.html"><img src="Images/chat.png" alt="chat" height="100%" width="100%"></a>
+    </nav>
+
+      <main class="content">
+        <h2>Welcome to my Website!</h2>
+
+
+        <div class="inbox__people">
+            <h4>Active users</h4>
+
+      </div>
+      
+      
+      <br>
+      <hr>
+      <div class="content">
+        <div class="messages__history"></div>
+          <div class="fallback"></div>
+        <div class="inbox__messages">
+            
+          
+        </div>
+
+        <form class="message_form">
+            <input type="text" class="message_form__input" placeholder="Type a message" />
+            <button class="message_form__button" type="submit">
+              Enter
+            </button>
+          </form>
+      </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/client.js"></script>
+  </body>
+</html>
