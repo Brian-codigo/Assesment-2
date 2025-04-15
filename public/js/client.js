@@ -2,7 +2,13 @@
 
 const socket = io();
 
+
+
 const inboxPeople = document.querySelector(".inbox__people");
+
+const typingIndicator = document.querySelector(".typing-indicator");
+let typingTimeout;
+
 
 
 let userName = "";
@@ -55,10 +61,29 @@ socket.on("new user", function (data) {
 //when a user leaves
 socket.on("user disconnected", function (userName) {
   document.querySelector(`.${userName}-userlist`).remove();
+
+  if (userName !== userName) return; // skip if it's the current user
+
+  const leaveNote = document.createElement("div");
+  leaveNote.classList.add("notification"); //Mostly just styling 
+  leaveNote.style.color = "red";
+  leaveNote.style.fontStyle = "italic";
+  leaveNote.innerText = `${userName} has left the chat`; //Notification
+  messageBox.appendChild(leaveNote);
 });
 
 
 const inputField = document.querySelector(".message_form__input");
+
+inputField.addEventListener("input", () => {
+  socket.emit("typing", userName);
+
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(() => {
+    socket.emit("stopTyping", userName);
+  }, 2000);
+});
+
 const messageForm = document.querySelector(".message_form");
 const messageBox = document.querySelector(".messages__history");
 
@@ -108,3 +133,33 @@ messageForm.addEventListener("submit", (e) => {
 socket.on("chat message", function (data) {
   addNewMessage({ user: data.nick, message: data.message });
 });
+
+socket.on("user joined", function (user) {
+  if (user !== userName) {
+    const joinNote = document.createElement("div");
+    joinNote.classList.add("notification");//Mostly just styling 
+    joinNote.style.color = "green";
+    joinNote.style.fontStyle = "italic";
+    joinNote.innerText = ` ${user} has joined the chat`; //Notification
+    messageBox.appendChild(joinNote);
+  }
+});
+
+socket.on("displayTyping", (user) => {
+  if (user !== userName) {
+    typingIndicator.innerText = `${user} is typing...`;
+    typingIndicator.style.display = "block";
+
+    clearTimeout(typingIndicator.timer);
+    typingIndicator.timer = setTimeout(() => {
+      typingIndicator.style.display = "none";
+    }, 3000);
+  }
+});
+
+socket.on("hideTyping", (user) => {
+  if (user !== userName) {
+    typingIndicator.style.display = "none";
+  }
+});
+
